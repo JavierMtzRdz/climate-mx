@@ -20,7 +20,7 @@
 ## Paquetes a utilizar ----
 pacman::p_load(tidyverse, janitor, writexl, readxl, scales, mexicoR,
                sf, rgdal, gganimate, transformr, mytidyfunctions,
-               openxlsx)
+               openxlsx, presupuestoR)
 
 ## Especificar locale ----
 Sys.setlocale("LC_ALL", "es_ES.UTF-8")
@@ -375,7 +375,7 @@ animate(plot = my_animation_2,
 
 ## Cargar sequia_por ----
 
-sequia_por <- read.table(file = "01_datos_brutos/porcentaje_de_afectacion_por_sequia_en_mexico.txt", header = TRUE) %>% 
+sequia_por <- read.table(file = "01_data-raw//porcentaje_de_afectacion_por_sequia_en_mexico.txt", header = TRUE) %>% 
   mutate(., Fecha = row.names(.)) %>% 
   rename(fecha = Fecha) %>% 
   as_tibble() %>% 
@@ -407,12 +407,15 @@ sequia_por <- read.table(file = "01_datos_brutos/porcentaje_de_afectacion_por_se
          fecha_n_anio = as.Date(fecha_n_anio, "%m-%d"),
          .by = fecha) %>% 
   complete(anio,
-           fill = list(fecha_n_anio = as.Date("2024-01-01")))
+           fill = list(fecha_n_anio = as.Date("2024-01-01"))) %>% 
+  group_by(sequia_id) %>% 
+  conect_value(anio, fecha) %>% 
+  mutate(fecha_n_anio = if_else(anio != year(fecha),
+                         as.Date(paste0(anio, "-01-01")), fecha),
+         fecha_n_anio = update(fecha_n_anio, year = 2010)) 
 
-
-
-sequia_por %>%
-  filter(anio >= 2010) %>%
+sequia_por %>% 
+  filter(anio >= 2011) %>% 
   ggplot(aes(x = fecha_n_anio,
              y = percent,
              fill = sequia_id)) +
@@ -445,11 +448,56 @@ sequia_por %>%
     drop = FALSE) +
   theme_jmr()
 
-ggsave(paste0("02_graficas/",
+ggsave(paste0("02_figs/",
               "historiq-sequia",
               ".png"),
        bg = "transparent",
-       width = 200,                  # Ancho de la gráfica
+       width = 200,
+       height = 250,
+       units = "mm")
+
+### V2
+
+
+sequia_por %>%
+  filter(anio >= 2011) %>%
+  ggplot(aes(x = fecha_n_anio,
+             y = percent,
+             fill = sequia_id)) +
+  geom_area() +
+  facet_wrap(anio~ .,
+             ncol = 2,
+             strip.position = "right") +
+  ylim(0, 1) +
+  ylim(0, 1) +
+  scale_y_continuous(labels = percent) +
+  scale_x_date(date_labels = "%B",
+               expand = expansion(mult = c(0.0, 0.0))) +
+  labs(x = element_blank(),
+       y = element_blank()) +
+  scale_fill_manual(
+    values = rcartocolor::carto_pal(6, "RedOr"),
+    breaks = c("0",
+               "D0",
+               "D1",
+               "D2",
+               "D3",
+               "D4"),
+    labels = c("0" = "Sin sequía",
+               "D0" = "Anormalmente\nseco",
+               "D1" = "Moderada",
+               "D2" = "Severa",
+               "D3" = "Extrema",
+               "D4" = "Excepcional"),
+    name = "Intensidad de la sequía",
+    drop = FALSE) +
+  theme_jmr()
+
+ggsave(paste0("02_figs/",
+              "historiq-sequia-v2",
+              ".png"),
+       bg = "transparent",
+       width = 300,
        height = 300,
        units = "mm")
 
