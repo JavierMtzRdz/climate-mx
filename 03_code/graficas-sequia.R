@@ -169,11 +169,14 @@ map_hex %>%
     panel.border = element_blank()
   )
 
-ggsave("02_figs/hexagonos-sequia-Mx.png",
-       bg = "transparent",
-       width = 200,                  # Ancho de la gráfica
-       height = 127,
-       units = "mm")
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/hexagonos-sequia-Mx.", .),
+             bg = "transparent",
+             width = 200,                  # Ancho de la gráfica
+             height = 127,
+             units = "mm"))
+
+
 
 
 # Generar gift con transición temporal ----
@@ -450,14 +453,12 @@ sequia_por %>%
     drop = FALSE) +
   theme_jmr()
 
-ggsave(paste0("02_figs/",
-              "historiq-sequia",
-              ".png"),
-       bg = "transparent",
-       width = 200,
-       height = 250,
-       units = "mm")
-
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/historiq-sequia.", .),
+             bg = "transparent",
+             width = 200,
+             height = 250,
+             units = "mm"))
 ### V2
 
 
@@ -496,13 +497,13 @@ sequia_por %>%
     drop = FALSE) +
   theme_jmr()
 
-ggsave(paste0("02_figs/",
-              "historiq-sequia-v2",
-              ".png"),
-       bg = "transparent",
-       width = 300,
-       height = 300,
-       units = "mm")
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/historiq-sequia-v2.", .),
+             bg = "transparent",
+             width = 300,
+             height = 300,
+             units = "mm"))
+
 
 
 

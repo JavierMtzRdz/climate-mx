@@ -108,13 +108,13 @@ hist_mes %>%
                   guide = "none") +
   theme(plot.title.position = "panel")
 
-ggsave(paste0("02_figs/",
-              "historiq-presas",
-              ".png"),
-       bg = "transparent",
-       width = 200,     
-       height = 120,
-       units = "mm")
+
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/historiq-presas.", .),
+             bg = "transparent",
+             width = 200,     
+             height = 120,
+             units = "mm"))
 
 
 # Vis 2
@@ -165,11 +165,11 @@ presas_data %>%
   theme(legend.spacing = unit(-10.0, "cm"))
   
 
-ggsave(paste0("02_figs/",
-              "historiq-presas-v2",
-              ".png"),
-       bg = "transparent",
-       width = 200,
-       height = 250,
-       units = "mm")
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/historiq-presas-v2.", .),
+             bg = "transparent",
+             width = 200,     
+             height = 120,
+             units = "mm"))
+
 
