@@ -97,7 +97,7 @@ hist_mes %>%
        color = element_blank(),
        x = element_blank(),
        y = "Porcentaje de llenado respecto al NAMO",
-       title = "Porcentaje de las presas en México",
+       title = "Nivel de llenado de las presas en México",
        caption = "Elaboración con datos de CONAGUA, SNIA. | @javiermtzrd") +
   scale_x_date(date_labels = "%b",
                date_breaks = "2 months",
@@ -156,7 +156,7 @@ presas_data %>%
                                      byrow = T,
                                      label.position = "bottom",
                                      order = 2)) +
-  labs(title = "Porcentaje de presas por rango de nivel de llenado",
+  labs(title = "Presas por rango de nivel de llenado",
        fill = "Nivel de llenado",
        x = element_blank(),
        y = element_blank(),
