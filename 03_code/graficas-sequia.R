@@ -30,9 +30,10 @@ options(scipen = 999)
 
 # Cargar datos ----
 ## Cargar mapa municipal ----
-municipios <- st_read("01_data-raw/muni_2018gw/muni_2018gw.shp") %>% 
+municipios <- st_read("01_data-raw/00_muns/00mun.shp") %>% 
   clean_names() %>% 
-  st_transform(4326) 
+  st_transform(4326) %>% 
+  st_make_valid()
 
 sequias <- read.xlsx("https://smn.conagua.gob.mx/tools/RESOURCES/Monitor%20de%20Sequia%20en%20Mexico/MunicipiosSequia.xlsx") %>% 
   clean_names() %>% 
@@ -75,7 +76,7 @@ map_hex <- hex %>%
   right_join(map_points_mun, 
              by = "num")
 
-dir.create("04_data-prcssd/mexico-hex/")
+dir.create("04_data-prcssd/mexico-hex/", showWarnings = F)
 write_sf(map_hex, "04_data-prcssd/mexico-hex/map_hex.shp")
 
 map_hex_edo <- map_hex %>% 
@@ -90,7 +91,7 @@ map_hex %>%
             by = c("cvegeo" = "cve_concatenada")) %>% 
   ggplot() +
   geom_sf(aes(fill = sequia),
-          size = 0.1,
+          linewidth = 0.1,
           color = "grey35") +
   geom_sf(data = map_hex_edo,
           fill = "transparent",
@@ -127,7 +128,7 @@ map_hex %>%
     guide = guide_legend(
       direction = "horizontal",
       keyheight = unit(5, units = "mm"), 
-      keywidth = unit(5, units = "mm"),
+      keywidth = unit(2, units = "mm"),
       title.position = 'top',
       title.hjust = 0,
       label.hjust = 0,
@@ -196,11 +197,11 @@ my_animation <- map_hex %>%
             by = c("cvegeo" = "cve_concatenada")) %>% 
   ggplot() +
   geom_sf(aes(fill = sequia),
-          size = 0.1,
+          linewidth = 0.1,
           color = "grey35") +
   geom_sf(data = map_hex_edo,
           fill = "transparent",
-          linewidth = 0.5,
+          linewidth = 0.3,
           color = "grey15") +
   transition_manual(fecha) +
   labs(
@@ -429,7 +430,8 @@ sequia_por %>%
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
   labs(x = element_blank(),
-       y = element_blank()) +
+       y = element_blank(),
+       caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
   scale_fill_manual(
     values = rcartocolor::carto_pal(6, "RedOr"),
     breaks = c("0",
@@ -474,7 +476,8 @@ sequia_por %>%
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
   labs(x = element_blank(),
-       y = element_blank()) +
+       y = element_blank(),
+       caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
   scale_fill_manual(
     values = rcartocolor::carto_pal(6, "RedOr"),
     breaks = c("0",
