@@ -168,8 +168,8 @@ presas_data %>%
 walk(c("png", "jpg"),
      ~ggsave(paste0("02_figs/historiq-presas-v2.", .),
              bg = "transparent",
-             width = 200,     
-             height = 120,
+             width = 200,
+             height = 250,
              units = "mm"))
 
 
