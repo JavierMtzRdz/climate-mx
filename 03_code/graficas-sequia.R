@@ -429,7 +429,8 @@ sequia_por %>%
              strip.position = "right") +
   ylim(0, 1) +
   ylim(0, 1) +
-  scale_y_continuous(labels = percent) +
+  scale_y_continuous(labels = percent,
+                     expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
   labs(x = element_blank(),
@@ -473,7 +474,8 @@ sequia_por %>%
              strip.position = "right") +
   ylim(0, 1) +
   ylim(0, 1) +
-  scale_y_continuous(labels = percent) +
+  scale_y_continuous(labels = percent,
+                     expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
   labs(x = element_blank(),

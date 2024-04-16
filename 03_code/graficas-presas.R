@@ -1,8 +1,7 @@
 
- ##################################################################
- ##               Proyecto: Visualizaciones presas               ##
- ##################################################################
- 
+##################################################################
+##               Proyecto: Visualizaciones presas               ##
+##################################################################
 ##
 ## Descipción:     Aquí están las visualizaciones de las presas.
 ##                 
@@ -139,7 +138,8 @@ presas_data %>%
   facet_wrap(anio~ .,
              ncol = 1,
              strip.position = "right") +
-  scale_y_continuous(labels = percent) +
+  scale_y_continuous(labels = percent,
+                     expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                date_breaks = "2 months",
                expand = expansion(mult = c(0.0, 0.0))) +
