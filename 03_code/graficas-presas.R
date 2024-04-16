@@ -156,13 +156,14 @@ presas_data %>%
                                      byrow = T,
                                      label.position = "bottom",
                                      order = 2)) +
-  labs(subtitle = "Porcentaje de presas por rango de nivel de llenado",
+  labs(title = "Porcentaje de presas por rango de nivel de llenado",
        fill = "Nivel de llenado",
        x = element_blank(),
        y = element_blank(),
        caption = paste0(str_wrap("Nota: Cada presa tiene diferente capacidad de almacenamiento, por lo cual esta gráfica no muestra un claro indicador del almacenamiento nacional. La idea sólo es resumir el estado de las 210 presas en el país.", 120),
        "\nElaboración con datos de CONAGUA, SNIA. | @javiermtzrd")) +
-  theme(legend.spacing = unit(-10.0, "cm"))
+  theme(legend.spacing = unit(-10.0, "cm"),
+        axis.text.y = element_text(size = 6))
   
 
 walk(c("png", "jpg"),

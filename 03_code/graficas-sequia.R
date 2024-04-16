@@ -433,7 +433,8 @@ sequia_por %>%
                      expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
-  labs(x = element_blank(),
+  labs(title = "Intensidad de lasequía en México",
+       x = element_blank(),
        y = element_blank(),
        caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
   scale_fill_manual(
@@ -451,8 +452,20 @@ sequia_por %>%
                "D3" = "Extrema",
                "D4" = "Excepcional"),
     name = "Intensidad de la sequía",
+    guide = guide_legend(override.aes = list(size = 3,
+                                             linetype = "solid"),
+                         direction = "horizontal",
+                         keyheight = unit(3, units = "mm"),
+                         keywidth = unit(20, units = "mm"),
+                         title.position = 'top',
+                         title.hjust = 0.5,
+                         label.hjust = 0.5,
+                         nrow = 1,
+                         byrow = T,
+                         label.position = "bottom",
+                         order = 2),
     drop = FALSE) +
-  theme_jmr()
+  theme_jmr(axis.text.y = element_text(size = 6))
 
 walk(c("png", "jpg"),
      ~ggsave(paste0("02_figs/historiq-sequia.", .),
