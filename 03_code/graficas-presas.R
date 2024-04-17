@@ -124,7 +124,13 @@ presas_data %>%
                                llenano <= .4 ~ "(20%, 40%]",
                                llenano <= .6 ~ "(40%, 60%]",
                                llenano <= .8 ~ "(60%, 80%]",
-                               T ~ "(80%, 100%]")) %>% 
+                               T ~ "(80%, 100%]"),
+         per_range = factor(per_range,
+                            levels = c("[0%, 20%]",
+                                       "(20%, 40%]",
+                                       "(40%, 60%]",
+                                       "(60%, 80%]",
+                                       "(80%, 100%]"))) %>% 
   count(fechamonitoreo, per_range) %>% 
   mutate(percent_range = n/sum(n), 
          .by = fechamonitoreo) %>% 

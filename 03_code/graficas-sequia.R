@@ -177,6 +177,99 @@ walk(c("png", "jpg"),
              units = "mm"))
 
 
+# Generar mapa V2----  
+map_hex %>% 
+  left_join(sequias %>% 
+              filter(fecha == as.Date(last(fecha))), 
+            by = c("cvegeo" = "cve_concatenada")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = sequia),
+          linewidth = 0.1,
+          color = "grey35") +
+  geom_sf(data = map_hex_edo,
+          fill = "transparent",
+          linewidth = 0.3,
+          color = "grey15") +
+  labs(
+    title = "Sequía en México",
+    subtitle = paste0("Información al ",
+                      format(as.Date(sequias %>% 
+                                       filter(fecha == last(fecha)) %>% 
+                                       .$fecha %>% unique()), "%d de %B de %Y")),
+    caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd"
+  ) +
+  coord_sf(ylim = c(15, 33)) +
+  # theme(legend.position = c(0.85, 0.8),
+  #       panel.background = element_rect(fill = "grey97",
+  #                                       color = "transparent")) +
+  scale_fill_manual(
+    values = c("#AED8FF", rcartocolor::carto_pal(5, "RedOr")),
+    breaks = c("Sin sequía",
+               "D0",
+               "D1",
+               "D2",
+               "D3",
+               "D4"),
+    labels = c("Sin sequía" = "Sin sequía",
+               "D0" = "Anormalmente seco",
+               "D1" = "Sequía moderada",
+               "D2" = "Sequía severa",
+               "D3" = "Sequía extrema",
+               "D4" = "Sequía excepcional"),
+    name = "Intensidad de la sequía",
+    drop = FALSE,
+    guide = guide_legend(
+      direction = "horizontal",
+      keyheight = unit(5, units = "mm"), 
+      keywidth = unit(2, units = "mm"),
+      title.position = 'top',
+      title.hjust = 0,
+      label.hjust = 0,
+      ncol = 1,
+      byrow = F,
+      reverse = F,
+      label.position = "right"
+    )
+  ) +
+  theme_void() +
+  theme(
+    axis.line = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    legend.position = c(0.2, 0.23),
+    plot.title = element_text(hjust = 0.9, 
+                              size = 18, 
+                              margin = margin(b = -40),
+                              face = "bold", 
+                              color = "grey20"),
+    plot.subtitle = element_text(hjust = 0.9,
+                                 size = 14,
+                                 vjust = -12,
+                                 # margin = margin(b = -100),
+                                 color = "gray50"),
+    plot.caption =  element_text(color = "gray50",
+                                 size = 10, 
+                                 hjust = 0,
+                                 margin = margin(t = -10)),
+    panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "#f5f5f2", color = NA), 
+    panel.background = element_rect(fill = "#f5f5f2", color = NA), 
+    legend.background = element_rect(fill = "transparent", color = NA),
+    panel.border = element_blank()
+  )
+
+walk(c("png", "jpg"),
+     ~ggsave(paste0("02_figs/hexagonos-sequia-Mx-v2.", .),
+             bg = "transparent",
+             width = 200,                  # Ancho de la gráfica
+             height = 127,
+             units = "mm"))
+
+
 
 
 # Generar gift con transición temporal ----
@@ -279,6 +372,98 @@ animate(plot = my_animation,
         units = "mm",
         res = 300, 
         renderer = gifski_renderer("02_figs/hexagonos-sequia-Mx.gif"),
+        fps = 2,
+        nframes = count_frames, 
+        duration = count_frames/2)
+
+
+# V2 ----
+my_animation <- map_hex %>% 
+  left_join(bd,
+            # fecha = format(fecha, "%d de %B de %Y"),
+            # filter(fecha >= as.Date("2021-08-15")), 
+            by = c("cvegeo" = "cve_concatenada")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = sequia),
+          linewidth = 0.1,
+          color = "grey35") +
+  geom_sf(data = map_hex_edo,
+          fill = "transparent",
+          linewidth = 0.3,
+          color = "grey15") +
+  transition_manual(fecha) +
+  labs(
+    title = "Sequía en México",
+    subtitle = '\nAl {format({count_dates$fecha[frame]}, "%d del %m de %Y")}',
+    caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd"
+  ) +
+  coord_sf(ylim = c(15, 33)) +
+  scale_fill_manual(
+    values = c("#AED8FF", rcartocolor::carto_pal(5, "RedOr")),
+    breaks = c("Sin sequía",
+               "D0",
+               "D1",
+               "D2",
+               "D3",
+               "D4"),
+    labels = c("Sin sequía" = "Sin sequía",
+               "D0" = "Anormalmente seco",
+               "D1" = "Sequía moderada",
+               "D2" = "Sequía severa",
+               "D3" = "Sequía extrema",
+               "D4" = "Sequía excepcional"),
+    name = "Intensidad de la sequía",
+    drop = FALSE,
+    guide = guide_legend(
+      direction = "horizontal",
+      keyheight = unit(5, units = "mm"), 
+      keywidth = unit(5, units = "mm"),
+      title.position = 'top',
+      title.hjust = 0,
+      label.hjust = 0,
+      ncol = 1,
+      byrow = F,
+      reverse = F,
+      label.position = "right"
+    )
+  ) +
+  theme_map() +
+  theme(
+    text = ggplot2::element_text(family = "Lato"),
+    panel.grid = element_blank(),
+    panel.border = element_blank(),
+    legend.position = c(0.07, 0.07),
+    plot.title = element_text(hjust = 0.9, 
+                              size = 18, 
+                              vjust = -5,
+                              face = "bold", 
+                              color = "grey20",
+                              margin = margin(-10, 0, -10, 0)
+    ),
+    plot.subtitle = element_text(hjust = 0.9,
+                                 size = 14,
+                                 vjust = -20,
+                                 color = "gray50",
+                                 margin = margin(-10, 0, -10, 0)
+    ),
+    plot.caption =  element_text(color = "gray50",
+                                 size = 10, 
+                                 hjust = 0),
+    legend.background = element_rect(fill = "transparent", color = NA),
+    plot.background = element_rect(fill = "#f5f5f2", color = NA),
+    plot.margin = margin(t = 0.1,  # Top margin
+                         r = 0,  # Right margin
+                         b = 0,  # Bottom margin
+                         l = 0)
+  )
+
+
+animate(plot = my_animation,      
+        width = 186,      
+        height = 120,
+        units = "mm",
+        res = 300, 
+        renderer = gifski_renderer("02_figs/hexagonos-sequia-Mx-v2.gif"),
         fps = 2,
         nframes = count_frames, 
         duration = count_frames/2)
@@ -473,17 +658,17 @@ walk(c("png", "jpg"),
              width = 200,
              height = 250,
              units = "mm"))
-### V2
 
+### V2 ----
 
-sequia_por %>%
-  filter(anio >= 2011) %>%
+sequia_por %>% 
+  filter(anio >= 2011) %>% 
   ggplot(aes(x = fecha_n_anio,
              y = percent,
              fill = sequia_id)) +
   geom_area() +
   facet_wrap(anio~ .,
-             ncol = 2,
+             ncol = 1,
              strip.position = "right") +
   ylim(0, 1) +
   ylim(0, 1) +
@@ -491,11 +676,12 @@ sequia_por %>%
                      expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
-  labs(x = element_blank(),
+  labs(title = "Intensidad de lasequía en México",
+       x = element_blank(),
        y = element_blank(),
        caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
   scale_fill_manual(
-    values = rcartocolor::carto_pal(6, "RedOr"),
+    values = c("#AED8FF", rcartocolor::carto_pal(5, "RedOr")),
     breaks = c("0",
                "D0",
                "D1",
@@ -509,16 +695,24 @@ sequia_por %>%
                "D3" = "Extrema",
                "D4" = "Excepcional"),
     name = "Intensidad de la sequía",
+    guide = guide_legend(override.aes = list(size = 3,
+                                             linetype = "solid"),
+                         direction = "horizontal",
+                         keyheight = unit(3, units = "mm"),
+                         keywidth = unit(20, units = "mm"),
+                         title.position = 'top',
+                         title.hjust = 0.5,
+                         label.hjust = 0.5,
+                         nrow = 1,
+                         byrow = T,
+                         label.position = "bottom",
+                         order = 2),
     drop = FALSE) +
-  theme_jmr()
+  theme_jmr(axis.text.y = element_text(size = 6))
 
 walk(c("png", "jpg"),
      ~ggsave(paste0("02_figs/historiq-sequia-v2.", .),
              bg = "transparent",
-             width = 300,
-             height = 300,
+             width = 200,
+             height = 250,
              units = "mm"))
-
-
-
-
