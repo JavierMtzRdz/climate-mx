@@ -19,7 +19,7 @@
 # Setup ----
 ## Paquetes a utilizar ----
 pacman::p_load(tidyverse, janitor, writexl, readxl, scales, mexicoR,
-               sf, rgdal, gganimate, transformr, mytidyfunctions,
+               sf, gganimate, transformr, mytidyfunctions,
                openxlsx, presupuestoR)
 
 ## Especificar locale ----
@@ -618,7 +618,8 @@ sequia_por %>%
                      expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
-  labs(title = "Intensidad de lasequía en México",
+  labs(title = "Intensidad de la sequía en México",
+       fill = element_blank(),
        x = element_blank(),
        y = element_blank(),
        caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
@@ -636,7 +637,6 @@ sequia_por %>%
                "D2" = "Severa",
                "D3" = "Extrema",
                "D4" = "Excepcional"),
-    name = "Intensidad de la sequía",
     guide = guide_legend(override.aes = list(size = 3,
                                              linetype = "solid"),
                          direction = "horizontal",
@@ -676,7 +676,8 @@ sequia_por %>%
                      expand = expansion(mult = c(0.0, 0.0))) +
   scale_x_date(date_labels = "%B",
                expand = expansion(mult = c(0.0, 0.0))) +
-  labs(title = "Intensidad de lasequía en México",
+  labs(title = "Intensidad de la sequía en México",
+       fill = element_blank(),
        x = element_blank(),
        y = element_blank(),
        caption = "Elaboración con datos de CONAGUA, Monitor de Sequía de México. | @javiermtzrd") +
@@ -694,7 +695,6 @@ sequia_por %>%
                "D2" = "Severa",
                "D3" = "Extrema",
                "D4" = "Excepcional"),
-    name = "Intensidad de la sequía",
     guide = guide_legend(override.aes = list(size = 3,
                                              linetype = "solid"),
                          direction = "horizontal",

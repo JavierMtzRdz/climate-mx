@@ -163,7 +163,7 @@ presas_data %>%
                                      label.position = "bottom",
                                      order = 2)) +
   labs(title = "Presas por rango de nivel de llenado",
-       fill = "Nivel de llenado",
+       fill = element_blank(),
        x = element_blank(),
        y = element_blank(),
        caption = paste0(str_wrap("Nota: Cada presa tiene diferente capacidad de almacenamiento, por lo cual esta gráfica no muestra un claro indicador del almacenamiento nacional. La idea sólo es resumir el estado de las 210 presas en el país.", 120),

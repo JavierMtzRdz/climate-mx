@@ -28,7 +28,7 @@ options(scipen = 999)
 
 library(jsonlite)
 
-fechas_ext <- seq(as.Date("1991-01-01"), Sys.Date(),
+fechas_ext <- seq(as.Date("2024-04-01"), Sys.Date(),
                   "1 month")
 fechas <- sort(c(fechas_ext, 
             update(fechas_ext, day = 15)))
